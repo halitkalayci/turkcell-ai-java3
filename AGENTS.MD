@@ -27,6 +27,9 @@ Herhangi bir detay eksikse; DUR ve SOR.
 
 Kod üretmeden önce şunları yapmak zorundasın;
 
+- Eğer üretilecek kod ilgili OPENAPI sözleşmesini penetre ediyor ise veya sözleşme yok ise
+kullanıcıdan sözleşmeyi sağlamasını iste ve DUR. Bir penetrasyon söz konusu ise nedeniyle açıkla. 
+
 - Bir dosya dökümü hazırla (hangi dosyalar üretilecek/değişecek + neden)
 
 - Herhangi bir detay eksikse sorularını sor.
