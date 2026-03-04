@@ -63,6 +63,10 @@ kullanıcıdan sözleşmeyi sağlamasını iste ve DUR. Bir penetrasyon söz kon
 
 - Eğer generator yoksa, controller ve DTO’lar **spec’e uygun olacak şekilde manuel olarak implement edilmelidir**.
 
+### 2.3 Swagger UI
+
+- Tüm servisler Swagger implementasyonu yapmalıdır.
+
 ## 3) ÇIKTI FORMATI 
 
 - Resmi bir dil kullan, emojilere, samimi dile yer verme.
@@ -87,3 +91,8 @@ Bir spring eureka server implementasyonu yaptıysan şunu söyle:
 `mvn spring-boot:run`
 `http://localhost:8761` adresine gittiğinde eurekayı görürsen tamamdır.
 ```
+
+
+## 4) Registry Server
+
+- Her servis kendisini varsayılan olarak `localhost:8761` adresinde çalışan Eureka Server'a tanıtmalıdır.

@@ -1,0 +1,15 @@
+openapi: 3.0.3
+info:
+  title: Order Service API
+  description: Turkcell Mini E-Commerce Platform — Order Service
+  version: 1.0.0
+  contact:
+    name: Turkcell
+servers:
+  - url: http://localhost:8081
+    description: Local development server
+
+paths: {}
+
+components:
+  schemas: {}

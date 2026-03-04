@@ -45,3 +45,13 @@ Bu döküman insan onayından geçmiş teknik kararları içerir ve konfirme ede
 **Karar:** springdoc-openapi-starter-webmvc-ui - 2.3.0
 
 **Neden:** En uyumlu versiyon
+
+---
+
+#### D005 - Registry Server
+
+**Son Güncelleme**: 04.03.2026
+
+**Karar:** Netflix Eurea Client
+
+**Neden:** En yaygın ve problemsiz kütüphane

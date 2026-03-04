@@ -5,6 +5,23 @@ spring:
   application:
     name: order-service
 
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    url: /openapi/order-service-v1.yaml
+    operationsSorter: alpha
+    tagsSorter: alpha
+    display-request-duration: true
+
 management:
   endpoints:
     web:
