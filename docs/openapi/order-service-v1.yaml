@@ -9,7 +9,321 @@ servers:
   - url: http://localhost:8081
     description: Local development server
 
-paths: {}
+tags:
+  - name: Orders
+    description: Sipariş yönetimi
+
+paths:
+  /api/v1/orders:
+    post:
+      tags: [Orders]
+      summary: Sipariş oluştur
+      operationId: createOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCreateRequest'
+      responses:
+        '201':
+          description: Sipariş başarıyla oluşturuldu
+          headers:
+            Location:
+              description: Oluşturulan siparişin URI'ı
+              schema:
+                type: string
+                example: /api/v1/orders/3fa85f64-5717-4562-b3fc-2c963f66afa6
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        '400':
+          description: Validasyon hatası
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: VALIDATION_ERROR
+                message: Request validation failed
+                details:
+                  - "items: en az 1 kalem zorunludur"
+        '409':
+          description: Stok yetersiz
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: INSUFFICIENT_STOCK
+                message: Insufficient stock for product
+                details: []
+        '500':
+          description: Sunucu hatası
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: INTERNAL_ERROR
+                message: An unexpected error occurred
+                details: []
+
+    get:
+      tags: [Orders]
+      summary: Sipariş listesi (sayfalı)
+      operationId: listOrders
+      description: >
+        Tüm siparişleri sayfalı olarak döner.
+
+        **TODO:** customer-service ve security entegrasyonu tamamlandığında bu
+        endpoint yalnızca authenticate olmuş müşterinin siparişlerini dönecek;
+        customerId filtresi o aşamada eklenecektir.
+      parameters:
+        - name: page
+          in: query
+          description: Sayfa numarası (0 tabanlı)
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: size
+          in: query
+          description: Sayfa başına kayıt sayısı
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Sipariş listesi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderPage'
+        '500':
+          description: Sunucu hatası
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/orders/{id}:
+    get:
+      tags: [Orders]
+      summary: Sipariş getir
+      operationId: getOrderById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Sipariş bulundu
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        '404':
+          description: Sipariş bulunamadı
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: ORDER_NOT_FOUND
+                message: Order not found
+                details: []
+        '500':
+          description: Sunucu hatası
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/orders/{id}/cancel:
+    patch:
+      tags: [Orders]
+      summary: Sipariş iptal et
+      operationId: cancelOrder
+      description: >
+        Siparişin durumunu CANCELLED olarak günceller.
+        Yalnızca PENDING veya CONFIRMED durumundaki siparişler iptal edilebilir.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Sipariş iptal edildi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        '404':
+          description: Sipariş bulunamadı
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: ORDER_NOT_FOUND
+                message: Order not found
+                details: []
+        '409':
+          description: Durum geçişi geçersiz veya sipariş zaten iptal edilmiş
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalidTransition:
+                  summary: Geçersiz durum geçişi
+                  value:
+                    code: INVALID_STATUS_TRANSITION
+                    message: Cannot cancel an order in DELIVERED status
+                    details: []
+                alreadyCancelled:
+                  summary: Sipariş zaten iptal edilmiş
+                  value:
+                    code: ORDER_ALREADY_CANCELLED
+                    message: Order is already cancelled
+                    details: []
+        '500':
+          description: Sunucu hatası
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
 components:
-  schemas: {}
+  schemas:
+
+    OrderItemCreateRequest:
+      type: object
+      required: [productId, quantity]
+      properties:
+        productId:
+          type: string
+          format: uuid
+          description: Ürünün benzersiz tanımlayıcısı
+        quantity:
+          type: integer
+          minimum: 1
+          description: Sipariş edilen adet
+
+    OrderCreateRequest:
+      type: object
+      required: [customerId, shippingAddress, items]
+      properties:
+        customerId:
+          type: string
+          format: uuid
+          description: Müşterinin benzersiz tanımlayıcısı
+        shippingAddress:
+          type: string
+          maxLength: 500
+          description: Teslimat adresi (serbest metin)
+        items:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/OrderItemCreateRequest'
+
+    OrderItemResponse:
+      type: object
+      properties:
+        productId:
+          type: string
+          format: uuid
+          description: Ürünün benzersiz tanımlayıcısı
+        productName:
+          type: string
+          description: Sipariş anındaki ürün adı (denormalize)
+        unitPrice:
+          type: number
+          format: double
+          description: Sipariş anındaki birim fiyat (denormalize)
+        quantity:
+          type: integer
+          description: Sipariş edilen adet
+
+    OrderResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        customerId:
+          type: string
+          format: uuid
+        status:
+          $ref: '#/components/schemas/OrderStatus'
+        shippingAddress:
+          type: string
+        totalAmount:
+          type: number
+          format: double
+          description: Tüm kalemlerin toplam tutarı (hesaplanmış)
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemResponse'
+        orderDate:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    OrderPage:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderResponse'
+        page:
+          type: integer
+        size:
+          type: integer
+        totalItems:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+
+    OrderStatus:
+      type: string
+      enum: [PENDING, CONFIRMED, SHIPPED, DELIVERED, CANCELLED]
+      description: Sipariş durumu
+
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          description: >
+            Hata kodu. Olası değerler:
+            ORDER_NOT_FOUND, INVALID_STATUS_TRANSITION,
+            INSUFFICIENT_STOCK, ORDER_ALREADY_CANCELLED,
+            VALIDATION_ERROR, INTERNAL_ERROR
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: string

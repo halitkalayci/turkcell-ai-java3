@@ -1,0 +1,498 @@
+{
+  "info": {
+    "name": "Order Service API",
+    "description": "Turkcell Mini E-Commerce Platform — Order Service contract tests.\nBase URL: {{baseUrl}} (default: http://localhost:8081)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8081"
+    },
+    {
+      "key": "existingOrderId",
+      "value": "",
+      "description": "POST /api/v1/orders sonucunda otomatik doldurulur"
+    },
+    {
+      "key": "cancelledOrderId",
+      "value": "",
+      "description": "İkinci bir sipariş oluşturulup iptal edildikten sonra 409 ORDER_ALREADY_CANCELLED testinde kullanılır"
+    },
+    {
+      "key": "validProductId",
+      "value": "00000000-0000-0000-0000-000000000001",
+      "description": "order-service DB'sinde var olduğu kabul edilen ürün UUID'si"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. POST /api/v1/orders",
+      "item": [
+        {
+          "name": "✅ 201 — Geçerli sipariş oluştur",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Location header mevcut', () => pm.response.to.have.header('Location'));",
+                  "pm.test('Response body geçerli', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property('id');",
+                  "    pm.expect(body.status).to.equal('PENDING');",
+                  "    pm.expect(body.items).to.be.an('array').with.lengthOf(1);",
+                  "    pm.expect(body.totalAmount).to.be.a('number');",
+                  "    pm.collectionVariables.set('existingOrderId', body.id);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orders"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"shippingAddress\": \"Levent Mah. Büyükdere Cad. No:100 Şişli/İstanbul\",\n  \"items\": [\n    {\n      \"productId\": \"{{validProductId}}\",\n      \"quantity\": 2\n    }\n  ]\n}"
+            }
+          }
+        },
+        {
+          "name": "✅ 201 — Birden fazla kalem ile sipariş (cancel testi için)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "const body = pm.response.json();",
+                  "if (body && body.id) {",
+                  "    pm.collectionVariables.set('cancelledOrderId', body.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orders"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee\",\n  \"shippingAddress\": \"Kadıköy/İstanbul\",\n  \"items\": [\n    {\n      \"productId\": \"{{validProductId}}\",\n      \"quantity\": 1\n    }\n  ]\n}"
+            }
+          }
+        },
+        {
+          "name": "❌ 400 — customerId eksik",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));",
+                  "pm.test('code VALIDATION_ERROR', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.code).to.equal('VALIDATION_ERROR');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orders"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shippingAddress\": \"Levent Mah. No:100 İstanbul\",\n  \"items\": [\n    {\n      \"productId\": \"{{validProductId}}\",\n      \"quantity\": 2\n    }\n  ]\n}"
+            }
+          }
+        },
+        {
+          "name": "❌ 400 — items boş dizi",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));",
+                  "pm.test('code VALIDATION_ERROR', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.code).to.equal('VALIDATION_ERROR');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orders"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"shippingAddress\": \"Levent Mah. No:100 İstanbul\",\n  \"items\": []\n}"
+            }
+          }
+        },
+        {
+          "name": "❌ 400 — quantity sıfır",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));",
+                  "pm.test('code VALIDATION_ERROR', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.code).to.equal('VALIDATION_ERROR');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orders"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"shippingAddress\": \"Levent Mah. No:100 İstanbul\",\n  \"items\": [\n    {\n      \"productId\": \"{{validProductId}}\",\n      \"quantity\": 0\n    }\n  ]\n}"
+            }
+          }
+        },
+        {
+          "name": "❌ 400 — shippingAddress eksik",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));",
+                  "pm.test('code VALIDATION_ERROR', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.code).to.equal('VALIDATION_ERROR');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orders"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"items\": [\n    {\n      \"productId\": \"{{validProductId}}\",\n      \"quantity\": 1\n    }\n  ]\n}"
+            }
+          }
+        },
+        {
+          "name": "❌ 409 — Stok yetersiz (INSUFFICIENT_STOCK)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 409', () => pm.response.to.have.status(409));",
+                  "pm.test('code INSUFFICIENT_STOCK', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.code).to.equal('INSUFFICIENT_STOCK');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orders"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"shippingAddress\": \"Levent Mah. No:100 İstanbul\",\n  \"items\": [\n    {\n      \"productId\": \"{{validProductId}}\",\n      \"quantity\": 999999\n    }\n  ]\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. GET /api/v1/orders",
+      "item": [
+        {
+          "name": "✅ 200 — Varsayılan sayfalama",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('OrderPage yapısı geçerli', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.have.property('items');",
+                  "    pm.expect(body.items).to.be.an('array');",
+                  "    pm.expect(body).to.have.property('page');",
+                  "    pm.expect(body).to.have.property('size');",
+                  "    pm.expect(body).to.have.property('totalItems');",
+                  "    pm.expect(body).to.have.property('totalPages');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orders"]
+            }
+          }
+        },
+        {
+          "name": "✅ 200 — Sayfa parametreleri ile liste",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Sayfa bilgileri param ile eşleşiyor', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.page).to.equal(0);",
+                  "    pm.expect(body.size).to.equal(5);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders?page=0&size=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orders"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "5" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. GET /api/v1/orders/{id}",
+      "item": [
+        {
+          "name": "✅ 200 — Mevcut sipariş getir",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Response ID kolleksiyon değişkeni ile eşleşiyor', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.id).to.equal(pm.collectionVariables.get('existingOrderId'));",
+                  "    pm.expect(body).to.have.property('status');",
+                  "    pm.expect(body).to.have.property('items');",
+                  "    pm.expect(body).to.have.property('totalAmount');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders/{{existingOrderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orders", "{{existingOrderId}}"]
+            }
+          }
+        },
+        {
+          "name": "❌ 404 — Var olmayan UUID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 404', () => pm.response.to.have.status(404));",
+                  "pm.test('code ORDER_NOT_FOUND', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.code).to.equal('ORDER_NOT_FOUND');",
+                  "    pm.expect(body).to.have.property('message');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders/00000000-0000-0000-0000-000000000000",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orders", "00000000-0000-0000-0000-000000000000"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. PATCH /api/v1/orders/{id}/cancel",
+      "item": [
+        {
+          "name": "✅ 200 — Sipariş iptal et (cancelledOrderId)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Durum CANCELLED oldu', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.status).to.equal('CANCELLED');",
+                  "    pm.expect(body.id).to.equal(pm.collectionVariables.get('cancelledOrderId'));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders/{{cancelledOrderId}}/cancel",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orders", "{{cancelledOrderId}}", "cancel"]
+            }
+          }
+        },
+        {
+          "name": "❌ 409 — Sipariş zaten iptal edilmiş (ORDER_ALREADY_CANCELLED)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 409', () => pm.response.to.have.status(409));",
+                  "pm.test('code ORDER_ALREADY_CANCELLED', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.code).to.equal('ORDER_ALREADY_CANCELLED');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders/{{cancelledOrderId}}/cancel",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orders", "{{cancelledOrderId}}", "cancel"]
+            }
+          }
+        },
+        {
+          "name": "❌ 409 — Geçersiz durum geçişi (INVALID_STATUS_TRANSITION)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Bu test DELIVERED statüsündeki bir siparişe uygulanır.",
+                  "// order-service implement edildiğinde DB'de DELIVERED kayıt oluşturup",
+                  "// ID'yi manuel olarak değiştirin ya da bir setup scripti ekleyin.",
+                  "pm.test('Status 409', () => pm.response.to.have.status(409));",
+                  "pm.test('code INVALID_STATUS_TRANSITION', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.code).to.equal('INVALID_STATUS_TRANSITION');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders/{{deliveredOrderId}}/cancel",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orders", "{{deliveredOrderId}}", "cancel"]
+            }
+          }
+        },
+        {
+          "name": "❌ 404 — Var olmayan UUID ile iptal",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 404', () => pm.response.to.have.status(404));",
+                  "pm.test('code ORDER_NOT_FOUND', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.code).to.equal('ORDER_NOT_FOUND');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orders/00000000-0000-0000-0000-000000000000/cancel",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orders", "00000000-0000-0000-0000-000000000000", "cancel"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
