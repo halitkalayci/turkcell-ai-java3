@@ -2,7 +2,7 @@
 
 Bu repo mini e-ticaret mikroservis ekosistemini barındırır. Bu dosya bu repoda çalışacak AI ve insanlar için bir anayasa hükmündedir.
 
-Teknoloji Yığını: Java 21, Spring Boot 3.4.X, Maven
+Bu projede çalışırken herhangi bir karar bulmak istersen [DECISIONS.md](.ai/governance/DECISIONS.MD) bakabilirsin.
 
 ---
 

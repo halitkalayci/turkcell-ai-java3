@@ -30,10 +30,11 @@ management:
 
 springdoc:
   api-docs:
-    enabled: false
+    enabled: true
   swagger-ui:
     path: /swagger-ui.html
     url: /openapi/product-service-v1.yaml
     operationsSorter: alpha
     tagsSorter: alpha
     display-request-duration: true
+
