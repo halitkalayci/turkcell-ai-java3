@@ -13,6 +13,8 @@ Teknoloji Yığını: Java 21, Spring Boot 3.4.X, Maven
 Eğer aşağıdaki listede herhangi bir eksik/yanlış bilgi varsa bu
 bilgiyi sen uyduramazsın. Kullanıcıya bu detayı sor, netleştirdikten sonra ilerle.
 
+- Bağımlılıklar / kütüphaneler (runtime, test scope dahil) — kullanılacak her bağımlılık açıkça onaylanmalıdır; varsayım yapılamaz.
+
 - Kütüphane/Framework versiyonları
 
 - endpoint, request/response alanları veya objeleri, hata modelleri
@@ -31,6 +33,8 @@ Kod üretmeden önce şunları yapmak zorundasın;
 kullanıcıdan sözleşmeyi sağlamasını iste ve DUR. Bir penetrasyon söz konusu ise nedeniyle açıkla. 
 
 - Bir dosya dökümü hazırla (hangi dosyalar üretilecek/değişecek + neden)
+
+- Dosya dökümüne tüm yeni bağımlılıkları (groupId, artifactId, scope) listele ve her biri için ayrı onay bekle; onaysız pom.xml'e bağımlılık ekleme.
 
 - Herhangi bir detay eksikse sorularını sor.
 
