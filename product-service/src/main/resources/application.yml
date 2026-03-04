@@ -27,3 +27,13 @@ management:
   endpoint:
     health:
       show-details: always
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    path: /swagger-ui.html
+    url: /openapi/product-service-v1.yaml
+    operationsSorter: alpha
+    tagsSorter: alpha
+    display-request-duration: true
