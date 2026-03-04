@@ -32,3 +32,25 @@ Kod üretmeden önce şunları yapmak zorundasın;
 - Herhangi bir detay eksikse sorularını sor.
 
 - Dosya oluşturma işlemini birbiriyle alakalı maksimum 5'er dosyalık gruplar halinde batchlere böl. Her batch arasında benden ek onay bekle.
+
+## 2) CONTRACT FIRST
+
+### 2.1 OpenAPI doğruluğun tek kaynağıdır (Source of Truth)
+
+- API sözleşmeleri şu dizinde bulunur: `/docs/openapi`
+
+- Her servis **kendi OpenAPI dosyasına sahip olmalıdır**:
+  - `docs/openapi/product-service.yml`
+  - `docs/openapi/order-service.yml`
+
+- Swagger UI, bu sözleşmelerden üretilir.
+
+- Implementasyon **her zaman sözleşmeye uymalıdır**; sözleşme implementasyona göre değiştirilemez.
+
+### 2.2 Kod Üretim Politikası (Code Generation Policy)
+
+- OpenAPI araçları **yalnızca repoda zaten mevcutsa** kullanılabilir.
+
+- Açık onay olmadan **yeni bir OpenAPI generator bağımlılığı eklenmemelidir**.
+
+- Eğer generator yoksa, controller ve DTO’lar **spec’e uygun olacak şekilde manuel olarak implement edilmelidir**.
