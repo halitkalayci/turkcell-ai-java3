@@ -2,6 +2,8 @@
 
 Bu repo mini e-ticaret mikroservis ekosistemini barındırır. Bu dosya bu repoda çalışacak AI ve insanlar için bir anayasa hükmündedir.
 
+Teknoloji Yığını: Java 21, Spring Boot 3.4.X, Maven
+
 ---
 
 ### 1. Nasıl Çalışılır? (Zorunlu İş Akışı)
