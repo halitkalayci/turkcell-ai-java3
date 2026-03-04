@@ -55,3 +55,13 @@ Bu döküman insan onayından geçmiş teknik kararları içerir ve konfirme ede
 **Karar:** Netflix Eurea Client
 
 **Neden:** En yaygın ve problemsiz kütüphane
+
+---
+
+#### D005 - Spring Cloud 
+
+**Son Güncelleme**: 04.03.2026
+
+**Karar:** 2024.0.0
+
+**Neden:** En yaygın ve problemsiz versiyon.
