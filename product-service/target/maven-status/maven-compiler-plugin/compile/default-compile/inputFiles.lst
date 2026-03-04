@@ -1,1 +1,15 @@
+C:\Users\PC1\Desktop\Projects\Education\turkcell-ai-java\product-service\src\main\java\com\turkcell\productservice\controller\ProductController.java
+C:\Users\PC1\Desktop\Projects\Education\turkcell-ai-java\product-service\src\main\java\com\turkcell\productservice\dto\request\ProductCreateRequest.java
+C:\Users\PC1\Desktop\Projects\Education\turkcell-ai-java\product-service\src\main\java\com\turkcell\productservice\dto\request\ProductUpdateRequest.java
+C:\Users\PC1\Desktop\Projects\Education\turkcell-ai-java\product-service\src\main\java\com\turkcell\productservice\dto\response\ErrorResponse.java
+C:\Users\PC1\Desktop\Projects\Education\turkcell-ai-java\product-service\src\main\java\com\turkcell\productservice\dto\response\ProductPageResponse.java
+C:\Users\PC1\Desktop\Projects\Education\turkcell-ai-java\product-service\src\main\java\com\turkcell\productservice\dto\response\ProductResponse.java
+C:\Users\PC1\Desktop\Projects\Education\turkcell-ai-java\product-service\src\main\java\com\turkcell\productservice\entity\Product.java
+C:\Users\PC1\Desktop\Projects\Education\turkcell-ai-java\product-service\src\main\java\com\turkcell\productservice\exception\GlobalExceptionHandler.java
+C:\Users\PC1\Desktop\Projects\Education\turkcell-ai-java\product-service\src\main\java\com\turkcell\productservice\exception\ProductNotFoundException.java
+C:\Users\PC1\Desktop\Projects\Education\turkcell-ai-java\product-service\src\main\java\com\turkcell\productservice\exception\SkuAlreadyExistsException.java
+C:\Users\PC1\Desktop\Projects\Education\turkcell-ai-java\product-service\src\main\java\com\turkcell\productservice\mapper\ProductMapper.java
 C:\Users\PC1\Desktop\Projects\Education\turkcell-ai-java\product-service\src\main\java\com\turkcell\productservice\ProductServiceApplication.java
+C:\Users\PC1\Desktop\Projects\Education\turkcell-ai-java\product-service\src\main\java\com\turkcell\productservice\repository\ProductRepository.java
+C:\Users\PC1\Desktop\Projects\Education\turkcell-ai-java\product-service\src\main\java\com\turkcell\productservice\service\impl\ProductServiceImpl.java
+C:\Users\PC1\Desktop\Projects\Education\turkcell-ai-java\product-service\src\main\java\com\turkcell\productservice\service\ProductService.java
