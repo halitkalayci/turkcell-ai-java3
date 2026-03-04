@@ -20,3 +20,13 @@ bilgiyi sen uyduramazsın. Kullanıcıya bu detayı sor, netleştirdikten sonra 
 - İş kuralları
 
 Herhangi bir detay eksikse; DUR ve SOR.
+
+### 1.2 Önce Planla, sonra kodla
+
+Kod üretmeden önce şunları yapmak zorundasın;
+
+- Bir dosya dökümü hazırla (hangi dosyalar üretilecek/değişecek + neden)
+
+- Herhangi bir detay eksikse sorularını sor.
+
+- Dosya oluşturma işlemini birbiriyle alakalı maksimum 5'er dosyalık gruplar halinde batchlere böl. Her batch arasında benden ek onay bekle.
