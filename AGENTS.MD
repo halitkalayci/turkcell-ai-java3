@@ -7,7 +7,7 @@ Bu projede çalışırken herhangi bir karar bulmak istersen [DECISIONS.md](.ai/
 Bu projede çalışırken herhangi bir iş kuralı ile alakalı durumlar için [RULES.md]() bakabilirsin.
 ---
 
-### 1. Nasıl Çalışılır? (Zorunlu İş Akışı)
+## 1. Nasıl Çalışılır? (Zorunlu İş Akışı)
 
 ### 1.1 Uydurma YOK
 
@@ -33,7 +33,7 @@ Kod üretmeden önce şunları yapmak zorundasın;
 - Eğer üretilecek kod ilgili OPENAPI sözleşmesini penetre ediyor ise veya sözleşme yok ise
 kullanıcıdan sözleşmeyi sağlamasını iste ve DUR. Bir penetrasyon söz konusu ise nedeniyle açıkla. 
 
-- Bir dosya dökümü hazırla (hangi dosyalar üretilecek/değişecek + neden)
+- Bir dosya dökümü hazırla (dosyaların yanına dosya yolu ekleme.) (hangi dosyalar üretilecek/değişecek + neden)
 
 - Dosya dökümüne tüm yeni bağımlılıkları (groupId, artifactId, scope) listele ve her biri için ayrı onay bekle; onaysız pom.xml'e bağımlılık ekleme.
 
@@ -62,3 +62,28 @@ kullanıcıdan sözleşmeyi sağlamasını iste ve DUR. Bir penetrasyon söz kon
 - Açık onay olmadan **yeni bir OpenAPI generator bağımlılığı eklenmemelidir**.
 
 - Eğer generator yoksa, controller ve DTO’lar **spec’e uygun olacak şekilde manuel olarak implement edilmelidir**.
+
+## 3) ÇIKTI FORMATI 
+
+- Resmi bir dil kullan, emojilere, samimi dile yer verme.
+
+- Yaptığın işi minimal cümlelere özet olarak maksimum 2-3 cümle ile özetle çok detaylı özetleme yapma.
+
+- Senden öneri özellikle istenmediği sürece önerilere çıktıda yer verme.
+
+- Yapılan işlerin dosya dökümü içerisine dosya yolu ekleme.
+
+- Çıktıyı 3 bölümde özetle; dosya dökümü, yapılan değişikliğin özeti varsa sorular.
+
+- Öneriler için şu istisnayı dikkate al; eğer önerin governance önerisi ise kesinlikle öner.
+
+- Her implementasyon sonrası bu implementasyonu test edebileceğimiz en kısa happy-path ver.
+
+örneğin:
+```
+Bir spring eureka server implementasyonu yaptıysan şunu söyle:
+
+`cd registry-server`
+`mvn spring-boot:run`
+`http://localhost:8761` adresine gittiğinde eurekayı görürsen tamamdır.
+```
