@@ -4,6 +4,7 @@ Bu repo mini e-ticaret mikroservis ekosistemini barındırır. Bu dosya bu repod
 
 Bu projede çalışırken herhangi bir karar bulmak istersen [DECISIONS.md](.ai/governance/DECISIONS.MD) bakabilirsin.
 
+Bu projede çalışırken herhangi bir iş kuralı ile alakalı durumlar için [RULES.md]() bakabilirsin.
 ---
 
 ### 1. Nasıl Çalışılır? (Zorunlu İş Akışı)
@@ -47,8 +48,8 @@ kullanıcıdan sözleşmeyi sağlamasını iste ve DUR. Bir penetrasyon söz kon
 - API sözleşmeleri şu dizinde bulunur: `/docs/openapi`
 
 - Her servis **kendi OpenAPI dosyasına sahip olmalıdır**:
-  - `docs/openapi/product-service.yml`
-  - `docs/openapi/order-service.yml`
+  - `docs/openapi/product-service-v1.yml`
+  - `docs/openapi/order-service-v1.yml`
 
 - Swagger UI, bu sözleşmelerden üretilir.
 
