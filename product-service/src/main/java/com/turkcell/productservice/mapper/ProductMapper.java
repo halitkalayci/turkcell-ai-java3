@@ -3,6 +3,7 @@ package com.turkcell.productservice.mapper;
 import com.turkcell.productservice.dto.request.ProductCreateRequest;
 import com.turkcell.productservice.dto.request.ProductUpdateRequest;
 import com.turkcell.productservice.dto.response.ProductResponse;
+import com.turkcell.productservice.dto.response.StockUpdateResponse;
 import com.turkcell.productservice.entity.Product;
 import org.springframework.stereotype.Component;
 
@@ -33,5 +34,13 @@ public class ProductMapper {
         product.setPrice(request.getPrice());
         product.setStock(request.getStock());
         product.setSku(request.getSku());
+    }
+
+    public StockUpdateResponse toStockUpdateResponse(Product product) {
+        StockUpdateResponse response = new StockUpdateResponse();
+        response.setId(product.getId());
+        response.setName(product.getName());
+        response.setStock(product.getStock());
+        return response;
     }
 }

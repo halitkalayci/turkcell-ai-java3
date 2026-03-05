@@ -129,6 +129,7 @@ Bu döküman insan onayından geçmiş teknik kararları içerir ve konfirme ede
 | `Order.Read` | GET | `/api/v1/orders/{id}` |
 | `Order.Create` | POST | `/api/v1/orders` |
 | `Order.Cancel` | PATCH | `/api/v1/orders/{id}/cancel` |
+| `Product.UpdateStock` | PUT | `/api/v1/products/update-stock` |
 
 **Not:** Public endpoint'ler bu tabloda yer almaz (bkz. D010).
 
@@ -167,7 +168,7 @@ Diğer tüm endpointler geçerli JWT token gerektirir.
 
 **Son Güncelleme**: 05.03.2026
 
-**Karar:** 7 claim — tüm operasyonlar için tam kapsam.
+**Karar:** 8 claim — tüm operasyonlar için tam kapsam.
 
 | Claim | Açıklama |
 |---|---|
@@ -175,6 +176,7 @@ Diğer tüm endpointler geçerli JWT token gerektirir.
 | `Product.Create` | Yeni ürün oluşturma |
 | `Product.Update` | Mevcut ürün güncelleme |
 | `Product.Delete` | Ürün silme |
+| `Product.UpdateStock` | Ürün stok güncelleme |
 | `Order.Read` | Sipariş listeleme ve detay görüntüleme |
 | `Order.Create` | Yeni sipariş oluşturma |
 | `Order.Cancel` | Sipariş iptal etme |

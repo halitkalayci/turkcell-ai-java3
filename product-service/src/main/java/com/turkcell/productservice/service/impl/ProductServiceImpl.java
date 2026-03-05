@@ -2,8 +2,10 @@ package com.turkcell.productservice.service.impl;
 
 import com.turkcell.productservice.dto.request.ProductCreateRequest;
 import com.turkcell.productservice.dto.request.ProductUpdateRequest;
+import com.turkcell.productservice.dto.request.StockUpdateRequest;
 import com.turkcell.productservice.dto.response.ProductPageResponse;
 import com.turkcell.productservice.dto.response.ProductResponse;
+import com.turkcell.productservice.dto.response.StockUpdateResponse;
 import com.turkcell.productservice.entity.Product;
 import com.turkcell.productservice.exception.ProductNotFoundException;
 import com.turkcell.productservice.exception.SkuAlreadyExistsException;
@@ -88,5 +90,15 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductNotFoundException(id);
         }
         productRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public StockUpdateResponse updateStock(StockUpdateRequest request) {
+        Product product = productRepository.findById(request.getId())
+                .orElseThrow(() -> new ProductNotFoundException(request.getId()));
+        product.setStock(request.getStock());
+        Product saved = productRepository.save(product);
+        return productMapper.toStockUpdateResponse(saved);
     }
 }

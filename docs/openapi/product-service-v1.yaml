@@ -189,6 +189,39 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/v1/products/update-stock:
+    put:
+      tags: [Products]
+      summary: Update product stock
+      operationId: updateStock
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StockUpdateRequest"
+      responses:
+        "200":
+          description: Stock updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StockUpdateResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   securitySchemes:
     bearerAuth:
@@ -331,3 +364,29 @@ components:
           items:
             type: string
           description: Optional list of field-level messages
+
+    StockUpdateRequest:
+      type: object
+      required: [id, stock]
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+        stock:
+          type: integer
+          format: int32
+          minimum: 0
+
+    StockUpdateResponse:
+      type: object
+      required: [id, name, stock]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        stock:
+          type: integer
+          format: int32

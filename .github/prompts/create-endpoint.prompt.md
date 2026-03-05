@@ -10,7 +10,7 @@ Aşağıdaki bilgileri sağla, ardından adımları sırasıyla uygula.
 ## Girdi Parametreleri
 
 ```
-Servis              : <product-service | order-service>
+Servis              : <product-service | order-service | auth-service>
 Kaynak (Resource)   : <örn. products, orders>
 Mod                 : <tek endpoint | CRUD seti>
 ```

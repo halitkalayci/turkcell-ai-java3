@@ -2,8 +2,10 @@ package com.turkcell.productservice.controller;
 
 import com.turkcell.productservice.dto.request.ProductCreateRequest;
 import com.turkcell.productservice.dto.request.ProductUpdateRequest;
+import com.turkcell.productservice.dto.request.StockUpdateRequest;
 import com.turkcell.productservice.dto.response.ProductPageResponse;
 import com.turkcell.productservice.dto.response.ProductResponse;
+import com.turkcell.productservice.dto.response.StockUpdateResponse;
 import com.turkcell.productservice.service.ProductService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
@@ -66,5 +68,11 @@ public class ProductController {
     public ResponseEntity<Void> deleteProduct(@PathVariable UUID id) {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/update-stock")
+    @PreAuthorize("hasAuthority('Product.UpdateStock')")
+    public ResponseEntity<StockUpdateResponse> updateStock(@Valid @RequestBody StockUpdateRequest request) {
+        return ResponseEntity.ok(productService.updateStock(request));
     }
 }
