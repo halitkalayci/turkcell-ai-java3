@@ -65,3 +65,15 @@ Bu döküman insan onayından geçmiş teknik kararları içerir ve konfirme ede
 **Karar:** 2024.0.0
 
 **Neden:** En yaygın ve problemsiz versiyon.
+
+---
+
+#### D006 - Sync İletişim Kütüphanesi
+
+**Son Güncelleme**: 05.03.2026
+
+**Karar:** `spring-cloud-starter-openfeign` (Spring Cloud BOM 2024.0.1 kapsamında)
+
+**Neden:** Eureka servis keşfiyle entegre, deklaratif HTTP client tanımı, Spring Boot ekosistemiyle tam uyumlu. Hardcoded URL yerine `name = "<service-name>"` ile Eureka üzerinden çözümleme yapılır.
+
+**Alternatifler:** RestTemplate (manuel URL yönetimi gerektirir), WebClient (reaktif bağımlılık gerektirir — mevcut projede reaktif yok)
