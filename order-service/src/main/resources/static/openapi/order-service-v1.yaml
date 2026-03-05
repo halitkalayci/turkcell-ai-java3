@@ -19,6 +19,8 @@ paths:
       tags: [Orders]
       summary: Sipariş oluştur
       operationId: createOrder
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -74,6 +76,8 @@ paths:
       tags: [Orders]
       summary: Sipariş listesi (sayfalı)
       operationId: listOrders
+      security:
+        - bearerAuth: []
       description: >
         Tüm siparişleri sayfalı olarak döner.
 
@@ -117,6 +121,8 @@ paths:
       tags: [Orders]
       summary: Sipariş getir
       operationId: getOrderById
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -153,6 +159,8 @@ paths:
       tags: [Orders]
       summary: Sipariş iptal et
       operationId: cancelOrder
+      security:
+        - bearerAuth: []
       description: >
         Siparişin durumunu CANCELLED olarak günceller.
         Yalnızca PENDING veya CONFIRMED durumundaki siparişler iptal edilebilir.
@@ -207,6 +215,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
   schemas:
 
     OrderItemCreateRequest:

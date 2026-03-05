@@ -17,6 +17,7 @@ paths:
       tags: [Products]
       summary: List products
       operationId: listProducts
+      security: []
       parameters:
         - name: page
           in: query
@@ -60,6 +61,8 @@ paths:
       tags: [Products]
       summary: Create product
       operationId: createProduct
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -96,6 +99,7 @@ paths:
       tags: [Products]
       summary: Get product by id
       operationId: getProductById
+      security: []
       parameters:
         - name: id
           in: path
@@ -121,6 +125,8 @@ paths:
       tags: [Products]
       summary: Replace product by id
       operationId: replaceProduct
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -164,6 +170,8 @@ paths:
       tags: [Products]
       summary: Delete product by id
       operationId: deleteProduct
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -182,6 +190,12 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
   schemas:
     Product:
       type: object

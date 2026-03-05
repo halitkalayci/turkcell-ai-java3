@@ -67,6 +67,11 @@ kullanıcıdan sözleşmeyi sağlamasını iste ve DUR. Bir penetrasyon söz kon
 
 - Tüm servisler Swagger implementasyonu yapmalıdır.
 
+### 2.4 Test Dosyaları
+
+- Postman collection dosyaları `.ai/test/postman` dizininde tutulur.
+- Bu dizin dışına Postman dosyası oluşturulamaz.
+
 ## 3) ÇIKTI FORMATI 
 
 - Resmi bir dil kullan, emojilere, samimi dile yer verme.

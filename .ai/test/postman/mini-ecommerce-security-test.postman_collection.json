@@ -1,0 +1,171 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "Mini E-Commerce — Security Test",
+		"description": "auth-service'ten token alıp product-service'e ürün ekleme testi.\n\n## Kullanım\n1. registry-server, auth-service, product-service çalışıyor olmalı.\n2. Collection'ın Authorization sekmesinde \"Get New Access Token\" butonuna tıkla.\n3. Açılan tarayıcıda `admin` / `admin` ile giriş yap.\n4. Token alındıktan sonra \"Use Token\" butonuna tıkla.\n5. \"Create Product\" isteğini çalıştır → 201 dönmeli.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "grant_type",
+				"value": "authorization_code",
+				"type": "string"
+			},
+			{
+				"key": "tokenName",
+				"value": "auth-service-token",
+				"type": "string"
+			},
+			{
+				"key": "authUrl",
+				"value": "http://localhost:9000/oauth2/authorize",
+				"type": "string"
+			},
+			{
+				"key": "accessTokenUrl",
+				"value": "http://localhost:9000/oauth2/token",
+				"type": "string"
+			},
+			{
+				"key": "clientId",
+				"value": "mini-ecommerce-client",
+				"type": "string"
+			},
+			{
+				"key": "clientSecret",
+				"value": "secret",
+				"type": "string"
+			},
+			{
+				"key": "scope",
+				"value": "openid",
+				"type": "string"
+			},
+			{
+				"key": "redirect_uri",
+				"value": "https://oauth.pstmn.io/v1/callback",
+				"type": "string"
+			},
+			{
+				"key": "state",
+				"value": "",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			},
+			{
+				"key": "client_authentication",
+				"value": "body",
+				"type": "string"
+			},
+			{
+				"key": "useBrowser",
+				"value": true,
+				"type": "boolean"
+			}
+		]
+	},
+	"event": [],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Public — List Products (no token)",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/products",
+					"host": ["{{baseUrl}}"],
+					"path": ["api", "v1", "products"]
+				},
+				"description": "D010 — Public endpoint, token gerektirmez. 200 dönmeli."
+			},
+			"response": []
+		},
+		{
+			"name": "Protected — Create Product (no token → 401)",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Test Product\",\n  \"price\": 99.90,\n  \"stock\": 10,\n  \"sku\": \"TST-001\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/products",
+					"host": ["{{baseUrl}}"],
+					"path": ["api", "v1", "products"]
+				},
+				"description": "Token olmadan korumalı endpoint. 401 Unauthorized dönmeli."
+			},
+			"response": []
+		},
+		{
+			"name": "Protected — Create Product (with token → 201)",
+			"request": {
+				"auth": {
+					"type": "oauth2"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Token Test Product\",\n  \"price\": 149.90,\n  \"stock\": 25,\n  \"sku\": \"TKN-001\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/products",
+					"host": ["{{baseUrl}}"],
+					"path": ["api", "v1", "products"]
+				},
+				"description": "Collection'dan miras alınan OAuth2 token ile. 201 Created dönmeli.\n\nÖnce collection Authorization sekmesinden \"Get New Access Token\" ile token al."
+			},
+			"response": []
+		},
+		{
+			"name": "OIDC Discovery",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9000/.well-known/openid-configuration",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "9000",
+					"path": [".well-known", "openid-configuration"]
+				},
+				"description": "auth-service OIDC discovery endpoint. Sunucu ayaktaysa JSON döner."
+			},
+			"response": []
+		}
+	]
+}

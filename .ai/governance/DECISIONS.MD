@@ -180,3 +180,13 @@ Diğer tüm endpointler geçerli JWT token gerektirir.
 | `Order.Cancel` | Sipariş iptal etme |
 
 **Genişletme Kuralı:** Yeni bir claim eklendiğinde bu tablo güncellenmeli, ilgili endpoint D009 tablosuna eklenmeli ve OpenAPI spec güncellenmelidir. `add-claim.prompt.md` kullanılabilir.
+
+---
+
+#### D013 - Test Dosyaları Dizin Yapısı
+
+**Son Güncelleme**: 05.03.2026
+
+**Karar:** Postman collection dosyaları `.ai/test/postman` dizininde tutulur.
+
+**Neden:** Test artefaktları `.ai` dizini altında merkezi olarak yönetilir; proje kök dizininde veya `docs/` altında dağınık tutulmaz.

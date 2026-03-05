@@ -19,6 +19,12 @@ spring:
       enabled: true
       path: /h2-console
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTH_SERVER_ISSUER_URI:http://localhost:9000}
+
 eureka:
   client:
     service-url:

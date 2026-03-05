@@ -1,0 +1,9 @@
+com\turkcell\authservice\AuthServiceApplication.class
+com\turkcell\authservice\config\DataSeeder.class
+com\turkcell\authservice\repository\UserRepository.class
+com\turkcell\authservice\service\CustomUserDetailsService.class
+com\turkcell\authservice\config\SecurityConfig.class
+com\turkcell\authservice\entity\Claim.class
+com\turkcell\authservice\entity\User.class
+com\turkcell\authservice\repository\ClaimRepository.class
+com\turkcell\authservice\config\AuthorizationServerConfig.class

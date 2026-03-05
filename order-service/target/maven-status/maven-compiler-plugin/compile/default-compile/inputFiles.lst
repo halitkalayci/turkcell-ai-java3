@@ -1,5 +1,7 @@
 C:\Users\PC1\Desktop\Projects\Education\turkcell-ai-java\order-service\src\main\java\com\turkcell\orderservice\client\dto\ProductResponse.java
 C:\Users\PC1\Desktop\Projects\Education\turkcell-ai-java\order-service\src\main\java\com\turkcell\orderservice\client\ProductClient.java
+C:\Users\PC1\Desktop\Projects\Education\turkcell-ai-java\order-service\src\main\java\com\turkcell\orderservice\config\FeignClientConfig.java
+C:\Users\PC1\Desktop\Projects\Education\turkcell-ai-java\order-service\src\main\java\com\turkcell\orderservice\config\SecurityConfig.java
 C:\Users\PC1\Desktop\Projects\Education\turkcell-ai-java\order-service\src\main\java\com\turkcell\orderservice\controller\OrderController.java
 C:\Users\PC1\Desktop\Projects\Education\turkcell-ai-java\order-service\src\main\java\com\turkcell\orderservice\dto\request\OrderCreateRequest.java
 C:\Users\PC1\Desktop\Projects\Education\turkcell-ai-java\order-service\src\main\java\com\turkcell\orderservice\dto\request\OrderItemCreateRequest.java

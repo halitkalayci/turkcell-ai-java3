@@ -1,2 +1,2 @@
-com\turkcell\orderservice\OrderServiceApplication.class
 com\turkcell\orderservice\exception\InvalidStatusTransitionException.class
+com\turkcell\orderservice\OrderServiceApplication.class

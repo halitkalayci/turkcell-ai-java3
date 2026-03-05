@@ -19,6 +19,11 @@ spring:
           uri: lb://order-service
           predicates:
             - Path=/api/v1/orders/**
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTH_SERVER_ISSUER_URI:http://localhost:9000}
 
 eureka:
   client:
