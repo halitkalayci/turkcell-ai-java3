@@ -4,6 +4,8 @@ Bu repo mini e-ticaret mikroservis ekosistemini barındırır. Bu dosya bu repod
 
 Bu projede çalışırken herhangi bir karar bulmak istersen [DECISIONS.md](.ai/governance/DECISIONS.MD) bakabilirsin.
 
+Bu projede çalışırken mimari kurallar için [ARCHITECTURE.MD](.ai/architecture/ARCHITECTURE.MD), kodlama standartları için [CODING_STANDARDS.MD](.ai/architecture/CODING_STANDARDS.MD) bakabilirsin.
+
 Bu projede çalışırken herhangi bir iş kuralı ile alakalı durumlar için [RULES.md]() bakabilirsin.
 ---
 
