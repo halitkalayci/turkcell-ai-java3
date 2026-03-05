@@ -96,3 +96,49 @@ Bir spring eureka server implementasyonu yaptıysan şunu söyle:
 ## 4) Registry Server
 
 - Her servis kendisini varsayılan olarak `localhost:8761` adresinde çalışan Eureka Server'a tanıtmalıdır.
+
+## 5) Security
+
+### 5.1 Genel Kurallar
+
+- Güvenlik kararları [DECISIONS.MD](.ai/governance/DECISIONS.MD) içinde D007–D012 girişlerinde tanımlıdır. Bu girişlerden bağımsız karar üretilemez.
+
+- Secret, private key, client-secret gibi hassas değerler asla kaynak koduna veya YAML dosyasına gömülemez; environment variable veya config server üzerinden yönetilir.
+
+- Her güvenlik değişikliği ilgili OpenAPI spec dosyasına yansıtılmalıdır (bkz. 5.4).
+
+### 5.2 Yetkilendirme — Operation-Claim Modeli (D009)
+
+- Yetkilendirme `@PreAuthorize("hasAuthority('<Claim>')")` anotasyonu ile controller metodunda açıkça tanımlanır.
+
+- Kullanılabilecek claim kümesi DECISIONS.MD D012'de sabittir. Bu listede olmayan bir claim kullanılamaz; yeni claim eklemek için önce D012 güncellenmeli ve insan onayı alınmalıdır.
+
+- Claim → endpoint eşlemesi DECISIONS.MD D009 tablosundan alınır; tablodan bağımsız eşleşme üretilemez.
+
+- Uydurma YOK kuralı burada da geçerlidir: claim adı, endpoint, HTTP metodu serbest yorumlanamaz.
+
+### 5.3 Token Doğrulama (D008)
+
+- Gateway ve her resource servis (`product-service`, `order-service`) ayrı ayrı OAuth2 Resource Server olarak yapılandırılır.
+
+- `jwk-set-uri` veya `issuer-uri` değeri `application.yml` içinde `spring.security.oauth2.resourceserver.jwt.*` altında tanımlanır.
+
+- Bu değerler hardcoded olamaz; config/environment değişkeni olmak zorundadır.
+
+### 5.4 OpenAPI Güvenlik Zorunluluğu
+
+- Her servis OpenAPI spec'i `components.securitySchemes` altında `bearerAuth` (HTTP Bearer) tanımlamalıdır.
+
+- Public endpointler (`GET /api/v1/products`, `GET /api/v1/products/{id}`) `security: []` ile açıkça işaretlenir (D010).
+
+- Tüm diğer endpointler `security: - bearerAuth: []` ile korunmalıdır.
+
+- Security alanı olmayan bir endpoint spec'e eklenemez; varsayım yapılamaz.
+
+### 5.5 auth-service Yetki Alanı
+
+- Token ihracı, kullanıcı yönetimi ve claim atama yalnızca `auth-service` modülünün sorumluluğundadır.
+
+- `product-service` ve `order-service` token üretmez, kullanıcı doğrulamaz; yalnızca gelen JWT'yi doğrular ve claim'leri okur.
+
+- Feign ile servisler arası çağrılarda JWT token downstream'e iletilmelidir; servisler arası çağrılar da korunur.
